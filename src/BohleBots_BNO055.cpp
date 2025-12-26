@@ -84,10 +84,12 @@ void BNO::serialPrintCalibStat()	//gets the latest calibration values and prints
 
 void BNO::saveOffsets(unsigned int address)	//saves offset structure into eeprom at byte 100 upwards
 {
+#ifdef NOT_DEFINED
 	getOffsets(&_offsetData);
 	EEPROM.put(address, _offsetData);
-#ifdef ESP32
+  #ifdef ESP32
 	EEPROM.commit();
+  #endif
 #endif
 	_offsetCache = _offsetData;
 	_cached = true;
@@ -97,14 +99,20 @@ void BNO::loadOffsets(unsigned int address)	//loads offsets structure from eepro
 {
 	if(!_cached)
 	{
+#ifdef NOT_DEFINED		
 	EEPROM.get(address, _offsetData);
 	setOffsets(&_offsetData);
+#endif
 	_offsetCache = _offsetData;
 	_cached = true;
 	}
 	else
 	{
+#ifdef NOT_DEFINED
 	setOffsets(&_offsetCache);
+#else
+		;
+#endif
 	}
 }
 
